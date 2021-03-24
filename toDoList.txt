@@ -1,0 +1,102 @@
+
+DROP TABLE Users;
+DROP TABLE List;
+DROP TABLE Task;
+DROP TABLE Step;
+
+CREATE TABLE Users(
+IdUser INTEGER AUTO_INCREMENT PRIMARY KEY,
+FirstName VARCHAR(30) NOT NULL,
+LastName VARCHAR(30) NOT NULL,
+Email VARCHAR(50) NOT NULL,
+Password VARCHAR(20) NOT NULL,
+CreationDate date DEFAULT sysdate() NOT NULL,
+ModifyDate DATE,
+DeleteDate DATE
+);
+
+CREATE TABLE List(
+IdList INTEGER AUTO_INCREMENT PRIMARY KEY,
+userId INTEGER NOT NULL,
+Title VARCHAR(30) NOT NULL,
+Description VARCHAR(300),
+CreationDate DATE DEFAULT Sysdate() NOT NULL,
+ModifyDate DATE,
+DeleteDate DATE
+);
+
+CREATE TABLE Task(
+IdTask INTEGER AUTO_INCREMENT PRIMARY KEY,
+ListId INTEGER NOT NULL,
+Title VARCHAR(30) NOT NULL,
+Description VARCHAR(300),
+CheckTask BOOLEAN DEFAULT 0 NOT NULL,
+Deadline DATE NOT NULL, 
+CreationDate DATE DEFAULT Sysdate() NOT NULL,
+ModifyDate DATE,
+DeleteDate DATE
+);
+
+
+CREATE TABLE Step(
+IdStep INTEGER AUTO_INCREMENT PRIMARY KEY,
+TaskId INTEGER NOT NULL,
+Title VARCHAR(30)NOT NULL,
+Description VARCHAR(300),
+checkStep BOOLEAN,
+CreationDate DATE DEFAULT Sysdate() NOT NULL,
+ModifyDate DATE,
+DeleteDate DATE
+);
+
+ALTER TABLE Users ADD CONSTRAINT UNIQUE_Email UNIQUE(Email);
+ALTER TABLE List ADD CONSTRAINT FK_Users_List FOREIGN KEY (userId) REFERENCES USERS(IdUser);
+ALTER TABLE Task ADD CONSTRAINT FK_Task_List FOREIGN KEY (ListId) REFERENCES LIST(IdList);
+ALTER TABLE Task ADD CONSTRAINT UNIQUE_Title UNIQUE (Title);
+ALTER TABLE Step ADD CONSTRAINT FK_Step_Task FOREIGN KEY (TaskId) REFERENCES Task(IdTask);
+ALTER TABLE Step ADD CONSTRAINT UNIQUE_Title UNIQUE (Title);
+
+
+DELIMITER |
+CREATE or replace PROCEDURE InsertUser(FirstName Varchar(30), LastName Varchar(30), Email Varchar(50), Password Varchar(20)) 
+BEGIN 
+Insert Into Users(FirstName, LastName, Email, Password) Values (FirstName, LastName, Email, Password); 
+END |
+
+CREATE or replace PROCEDURE InsertList(userId INTEGER, Title Varchar(30), Description Varchar(300)) 
+BEGIN 
+Insert Into List(userId, Title, Description) Values (userId, Title, Description); 
+END |
+
+CREATE or replace PROCEDURE InsertTask(ListId INTEGER, Title Varchar(30), Description Varchar(300), deadline date) 
+BEGIN 
+Insert Into Task(ListId, Title, Description, Deadline) Values (userId, Title, Description, deadline); 
+END |
+
+CREATE or replace PROCEDURE CheckTask(PIdTask INTEGER) 
+BEGIN 
+	update Task set CheckTask=1 where IdTask=PIdTask;
+END |
+
+CREATE or replace PROCEDURE NotCheckTask(PIdTask INTEGER) 
+BEGIN 
+	update Task set CheckTask=0 where IdTask=PIdTask;
+END |
+
+CREATE or replace PROCEDURE CheckStep(PIdTask INTEGER) 
+BEGIN 
+	update Step set CheckStep=1 where IdStep=PIdTask;
+END |
+
+CREATE or replace PROCEDURE NotCheckStep(PIdStep INTEGER) 
+BEGIN 
+	update Step set CheckStep=0 where IdStep=PIdStep;
+END |
+
+CREATE or replace PROCEDURE NotCheckStep(PIdStep INTEGER) 
+BEGIN 
+	update Step set CheckStep=0 where IdStep=PIdStep;
+END |
+DELIMITER ;
+
+
