@@ -43,7 +43,7 @@ IdStep INTEGER AUTO_INCREMENT PRIMARY KEY,
 TaskId INTEGER NOT NULL,
 Title VARCHAR(30)NOT NULL,
 Description VARCHAR(300),
-checkStep BOOLEAN,
+checkStep BOOLEAN DEFAULT 0 NOT NULL,
 CreationDate DATE DEFAULT Sysdate() NOT NULL,
 ModifyDate DATE,
 DeleteDate DATE
@@ -51,6 +51,7 @@ DeleteDate DATE
 
 ALTER TABLE Users ADD CONSTRAINT UNIQUE_Email UNIQUE(Email);
 ALTER TABLE List ADD CONSTRAINT FK_Users_List FOREIGN KEY (userId) REFERENCES USERS(IdUser);
+ALTER TABLE List ADD CONSTRAINT UNIQUE_Title UNIQUE (Title);
 ALTER TABLE Task ADD CONSTRAINT FK_Task_List FOREIGN KEY (ListId) REFERENCES LIST(IdList);
 ALTER TABLE Task ADD CONSTRAINT UNIQUE_Title UNIQUE (Title);
 ALTER TABLE Step ADD CONSTRAINT FK_Step_Task FOREIGN KEY (TaskId) REFERENCES Task(IdTask);
@@ -70,7 +71,12 @@ END |
 
 CREATE or replace PROCEDURE InsertTask(ListId INTEGER, Title Varchar(30), Description Varchar(300), deadline date) 
 BEGIN 
-Insert Into Task(ListId, Title, Description, Deadline) Values (userId, Title, Description, deadline); 
+Insert Into Task(ListId, Title, Description, Deadline) Values (ListId, Title, Description, deadline); 
+END |
+
+CREATE or replace PROCEDURE InsertStep(TaskId INTEGER, Title Varchar(30), Description Varchar(300)) 
+BEGIN 
+Insert Into Step(TaskId, Title, Description) Values (TaskId, Title, Description); 
 END |
 
 CREATE or replace PROCEDURE CheckTask(PIdTask INTEGER) 
@@ -96,6 +102,24 @@ END |
 CREATE or replace PROCEDURE NotCheckStep(PIdStep INTEGER) 
 BEGIN 
 	update Step set CheckStep=0 where IdStep=PIdStep;
+END |
+
+CREATE or replace FUNCTION getUserId(PEmail VARCHAR(50)) RETURNS INTEGER 
+BEGIN DECLARE V_id Integer; 
+	Select idUser INTO V_id from Users where Email=PEmail; 
+RETURN V_id; 
+END |
+
+CREATE or replace FUNCTION getListId(PTitle VARCHAR(30)) RETURNS INTEGER 
+BEGIN DECLARE V_id Integer; 
+	Select idList INTO V_id from List where Title=PTitle; 
+RETURN V_id; 
+END |
+
+CREATE or replace FUNCTION getTaskId(PTitle VARCHAR(30)) RETURNS INTEGER 
+BEGIN DECLARE V_id Integer; 
+	Select idTask INTO V_id from Task where Title=PTitle;
+RETURN V_id; 
 END |
 DELIMITER ;
 
