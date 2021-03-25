@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3307
--- Généré le : mer. 24 mars 2021 à 19:29
+-- Généré le : jeu. 25 mars 2021 à 10:29
 -- Version du serveur :  10.4.13-MariaDB
 -- Version de PHP : 7.3.21
 
@@ -24,34 +24,30 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `step`
+-- Structure de la table `list`
 --
 
-DROP TABLE IF EXISTS `step`;
-CREATE TABLE IF NOT EXISTS `step` (
-  `IdStep` int(11) NOT NULL AUTO_INCREMENT,
-  `TaskId` int(11) NOT NULL,
+DROP TABLE IF EXISTS `list`;
+CREATE TABLE IF NOT EXISTS `list` (
+  `IdList` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) NOT NULL,
   `Title` varchar(30) NOT NULL,
   `Description` varchar(300) DEFAULT NULL,
-  `checkStep` tinyint(1) DEFAULT 0,
   `CreationDate` date NOT NULL DEFAULT sysdate(),
   `ModifyDate` date DEFAULT NULL,
   `DeleteDate` date DEFAULT NULL,
-  PRIMARY KEY (`IdStep`),
+  PRIMARY KEY (`IdList`),
   UNIQUE KEY `UNIQUE_Title` (`Title`),
-  KEY `FK_Step_Task` (`TaskId`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+  KEY `FK_Users_List` (`userId`)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 --
--- Déchargement des données de la table `step`
+-- Déchargement des données de la table `list`
 --
 
-INSERT INTO `step` (`IdStep`, `TaskId`, `Title`, `Description`, `checkStep`, `CreationDate`, `ModifyDate`, `DeleteDate`) VALUES
-(1, 2, 'step1', 'la step1', 1, '2021-03-24', NULL, NULL),
-(2, 2, 'step2', 'la step2', 1, '2021-03-24', NULL, NULL),
-(3, 2, 'step3', 'la step3', 1, '2021-03-24', NULL, NULL),
-(4, 2, 'step4', 'la step4', 1, '2021-03-24', NULL, NULL),
-(5, 2, 'step5', 'la step5', 1, '2021-03-24', NULL, NULL);
+INSERT INTO `list` (`IdList`, `userId`, `Title`, `Description`, `CreationDate`, `ModifyDate`, `DeleteDate`) VALUES
+(3, 3, 'bdd', 'liste des tâches pour créer la bdd', '2021-03-24', NULL, NULL),
+(6, 3, 'bdd2', 'la base de données 2', '2021-03-25', NULL, NULL);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

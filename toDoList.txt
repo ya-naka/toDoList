@@ -121,6 +121,50 @@ BEGIN DECLARE V_id Integer;
 	Select idTask INTO V_id from Task where Title=PTitle;
 RETURN V_id; 
 END |
+
+CREATE or replace FUNCTION getStepId(PTitle VARCHAR(30)) RETURNS INTEGER 
+BEGIN DECLARE V_id Integer; 
+	Select idStep INTO V_id from Step where Title=PTitle;
+RETURN V_id; 
+END |
 DELIMITER ;
 
+CREATE or replace FUNCTION getNbOfTask(PTitle VARCHAR(30)) RETURNS INTEGER 
+BEGIN DECLARE V_NbTask Integer; 
+	Select Count(idList) INTO V_NbTask from List, Task  where  idlist=listid and List.Title=PTitle;
+RETURN V_NbTask; 
+END |
+DELIMITER ;
 
+CREATE or replace FUNCTION getDateOfList(PTitle VARCHAR(30)) RETURNS DATE 
+BEGIN DECLARE V_Date DATE; 
+	Select CreationDate INTO V_Date from List where Title=PTitle;
+RETURN V_Date; 
+END |
+
+DELIMITER $$
+CREATE or replace FUNCTION getList(PuserId INTEGER) RETURNS VARCHAR(4000)
+BEGIN
+    DECLARE finished INTEGER DEFAULT 0;
+	DECLARE V_Liste VARCHAR(4000);
+    DECLARE V_Title VARCHAR(300) DEFAULT '';
+	
+    DECLARE C_Liste 
+		CURSOR FOR 
+			Select Title from List where userId = PuserId order by CreationDate DESC; 
+			
+    DECLARE CONTINUE HANDLER
+    FOR NOT FOUND SET finished = 1;
+    OPEN C_Liste;
+        getList:LOOP
+            FETCH C_Liste INTO V_title;
+            IF finished = 1 THEN 
+                LEAVE getList;
+            END IF;
+            SET V_Liste = CONCAT_WS('#',V_Liste, V_title);
+		END LOOP getList;
+    CLOSE C_Liste;
+	
+RETURN V_Liste; 
+END $$
+DELIMITER ;
