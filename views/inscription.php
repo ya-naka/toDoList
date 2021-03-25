@@ -1,6 +1,6 @@
 <body id="landing">
 	<main id="frame-container">
-	    <form action="<?= uri("/signup") ?>" method="POST" class="text-start" id="frame">
+	    <form action="<?= uri("/add_user") ?>" method="POST" class="text-start" id="frame">
 			<label for="email">Adresse e-mail</label>
 			<input type="email" id="email" name="email" class="form-control" placeholder="mail@provider.com" required autofocus>
 			<div class="error">

@@ -19,6 +19,7 @@ $routes = [
     "/add_list" => "add_list",
     "/add_task" => "add_task",
     "/add_step" => "add_step",
+    "/add_user" => "add_user",
     "/delete_step" => "delete_step",
     "/delete_task" => "delete_task",
     "/delete_list" => "delete_list",
