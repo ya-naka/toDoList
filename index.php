@@ -19,15 +19,11 @@ function render($view, $data){
 
 $requestURI = explode("?", $_SERVER["REQUEST_URI"]);
 $requestURI = substr($requestURI[0], strlen($config["uri_prefix"]));
-//$handler = $routes[$requestURI];
 
-//if(!isset($handler)){
 if(!isset($routes[$requestURI])){
-    require("{$routes['/page_not_found']}.php");
-    //$handler = $routes["/page_not_found"];
+    $handler = $routes["/error"];
 }else{
-    require("{$routes[$requestURI]}.php");
+    $handler = $routes[$requestURI];
 }
 
-//require("$handler.php");
-//require("handlers/$handler.php");
+require("handlers/$handler.php");

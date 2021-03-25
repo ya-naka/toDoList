@@ -1,2 +1,2 @@
 <?php
-require("connexion.php");
+render("connexion", ["page_title" => "Connexion"]);
