@@ -58,7 +58,7 @@ button {
 }
 
 #navbar {
-    display: none;
+    display: block;
     position: absolute;
     z-index: 2;
     top: 0;
@@ -103,7 +103,7 @@ button {
 }
 
 #close-menu-button {
-    display: none;
+    display: inline-block;
     margin-bottom: 1rem;
 }
 
@@ -132,6 +132,7 @@ button {
 
 #menu
 {
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -140,16 +141,18 @@ button {
     max-width: 400px;
     padding: 2rem 1rem;
     padding-bottom: 6rem;
-    background-color: #f5f5f5;
+    background-color: #ffffff;
     overflow-y: auto;
+    z-index: 4;
 }
 
 #content {
     position: absolute;
     top: 0;
-    left: 400px;
     right: 0;
-    padding: 2rem 1rem;
+    z-index: 1;
+	left: 0;
+	padding-top: 4rem;
 }
 
 #user-email {
@@ -183,7 +186,7 @@ button {
     position: absolute;
     top: -0.9rem;
     padding-right: 1rem;
-    background-color: #f5f5f5;
+    background-color: #ffffff;
     font-weight: bold;
 }
 
@@ -243,7 +246,7 @@ button {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #f5f5f5;
+    background-color: #ffffff;
 }
 
 #menu-bottom ul {
@@ -434,45 +437,54 @@ button.optional {
     display: grid;
     grid-row-gap: 1rem;
     margin-bottom: 1rem;
-    max-width: 400px;
+   /* max-width: 100%; */;
+    margin-left: 10%;
+    margin-right: 10%;
+    max-width: 600px;
 }
 
-@media screen and (max-width: 1200px) {
+#settings-title {
+	display: none;
+    }
+
+
+@media screen and (min-width: 1200px) {
     #navbar {
-	display: block;
+	display: none;
     }
     
     #menu {
-	display: none;
-	z-index: 4;
-	background-color: #ffffff;
+    background-color: #f5f5f5;
+    overflow-y: auto;
+    z-index: unset;
+    display: block;
     }
 
     #menu-bottom {
-	background-color: #ffffff;
+	background-color: #f5f5f5;
     }
 
     #menu-lists .title {
-	background-color: #ffffff;
+	background-color: #f5f5f5;
     }
 
     #close-menu-button {
-	display: inline-block;
+	display: none;
     }
 
     #content {
-	z-index: 1;
-	left: 0;
-	padding-top: 4rem;
+    z-index: auto;
+	left: 400px;
+    padding: 2rem 1rem;
     }
 
     #settings-title {
-	display: none;
+	display: block;
+    }
+
+    .settings-form {
+        max-width: 600px;
     }
 }
 
-@media screen and (max-width: 800px) {
-    .settings-form {
-	max-width: 100%;
-    }
-}
+
