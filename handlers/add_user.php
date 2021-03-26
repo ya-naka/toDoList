@@ -13,8 +13,8 @@ if($_POST["password"] !== $_POST["password_conf"]){
 $password = password_hash($_POST["password"], PASSWORD_BCRYPT);
 
 try{
-    $request = $db->prepare("CALL InsertUser(?,?,?,?)");
-    $request->execute(['a', 'b', $_POST["email"], $password]);
+    $request = $db->prepare("CALL InsertUser(?,?)");
+    $request->execute([$_POST["email"], $password]);
     $error = "none";
 }catch(Exception $e){
     $error = "erreur lors de la création du compte";

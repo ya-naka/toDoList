@@ -6,7 +6,7 @@ DROP TABLE Step;
 CREATE TABLE Users(
 IdUser INTEGER AUTO_INCREMENT PRIMARY KEY,
 Email VARCHAR(50) NOT NULL,
-Password VARCHAR(20) NOT NULL,
+Password VARCHAR(60) NOT NULL,
 CreationDate date DEFAULT sysdate() NOT NULL,
 ModifyDate DATE,
 DeleteDate DATE
@@ -57,9 +57,9 @@ ALTER TABLE Step ADD CONSTRAINT UNIQUE_Title UNIQUE (Title);
 
 
 DELIMITER |
-CREATE or replace PROCEDURE InsertUser(FirstName Varchar(30), LastName Varchar(30), Email Varchar(50), Password Varchar(20)) 
+CREATE or replace PROCEDURE InsertUser(Email Varchar(50), Password Varchar(60)) 
 BEGIN 
-Insert Into Users(FirstName, LastName, Email, Password) Values (FirstName, LastName, Email, Password); 
+Insert Into Users(Email, Password) Values (Email, Password); 
 END |
 
 CREATE or replace PROCEDURE InsertList(userId INTEGER, Title Varchar(30), Description Varchar(300)) 
