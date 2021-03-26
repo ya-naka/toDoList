@@ -1,4 +1,3 @@
-
 DROP TABLE Users;
 DROP TABLE List;
 DROP TABLE Task;
