@@ -127,20 +127,21 @@ BEGIN DECLARE V_id Integer;
 	Select idStep INTO V_id from Step where Title=PTitle;
 RETURN V_id; 
 END |
-DELIMITER ;
 
 CREATE or replace FUNCTION getNbOfTask(PTitle VARCHAR(30)) RETURNS INTEGER 
 BEGIN DECLARE V_NbTask Integer; 
 	Select Count(idList) INTO V_NbTask from List, Task  where  idlist=listid and List.Title=PTitle;
 RETURN V_NbTask; 
 END |
-DELIMITER ;
 
 CREATE or replace FUNCTION getDateOfList(PTitle VARCHAR(30)) RETURNS DATE 
 BEGIN DECLARE V_Date DATE; 
 	Select CreationDate INTO V_Date from List where Title=PTitle;
 RETURN V_Date; 
 END |
+
+DELIMITER ;
+
 
 DELIMITER $$
 CREATE or replace FUNCTION getList(PuserId INTEGER) RETURNS VARCHAR(4000)
