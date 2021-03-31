@@ -47,61 +47,123 @@ ModifyDate DATE,
 DeleteDate DATE
 );
 
+ALTER TABLE Users ENGINE InnoDB;
+ALTER TABLE List ENGINE InnoDB;
+ALTER TABLE Task ENGINE InnoDB;
+ALTER TABLE Step ENGINE InnoDB;
 ALTER TABLE Users ADD CONSTRAINT UNIQUE_Email UNIQUE(Email);
 ALTER TABLE List ADD CONSTRAINT FK_Users_List FOREIGN KEY (userId) REFERENCES USERS(IdUser);
-ALTER TABLE List ADD CONSTRAINT UNIQUE_Title UNIQUE (Title);
 ALTER TABLE Task ADD CONSTRAINT FK_Task_List FOREIGN KEY (ListId) REFERENCES LIST(IdList);
-ALTER TABLE Task ADD CONSTRAINT UNIQUE_Title UNIQUE (Title);
 ALTER TABLE Task ADD CONSTRAINT CK_Dealine CHECK (deadline>=CreationDate);
 ALTER TABLE Step ADD CONSTRAINT FK_Step_Task FOREIGN KEY (TaskId) REFERENCES Task(IdTask);
-ALTER TABLE Step ADD CONSTRAINT UNIQUE_Title UNIQUE (Title);
 
 
 DELIMITER |
-CREATE or replace PROCEDURE InsertUser(Email Varchar(50), Password Varchar(60)) 
+
+
+/*Insert*/
+CREATE or replace PROCEDURE InsertUser(PEmail Varchar(50), PPassword Varchar(60)) 
 BEGIN 
-Insert Into Users(Email, Password) Values (Email, Password); 
+Insert Into Users(Email, Password) Values (PEmail, PPassword); 
 END |
 
-CREATE or replace PROCEDURE InsertList(userId INTEGER, Title Varchar(30), Description Varchar(300)) 
+CREATE or replace PROCEDURE InsertList(PUserId INTEGER, PTitle Varchar(30), PDescription Varchar(300)) 
 BEGIN 
-Insert Into List(userId, Title, Description) Values (userId, Title, Description); 
+Insert Into List(userId, Title, Description) Values (PuserId, PTitle, PDescription); 
 END |
 
-CREATE or replace PROCEDURE InsertTask(ListId INTEGER, Title Varchar(30), Description Varchar(300), deadline date) 
+CREATE or replace PROCEDURE InsertTask(PListId INTEGER, PTitle Varchar(30), PDescription Varchar(300), PDeadline date) 
 BEGIN 
-Insert Into Task(ListId, Title, Description, Deadline) Values (ListId, Title, Description, deadline); 
+Insert Into Task(ListId, Title, Description, Deadline) Values (PListId, PTitle, PDescription, PDeadline); 
 END |
 
-CREATE or replace PROCEDURE InsertStep(TaskId INTEGER, Title Varchar(30), Description Varchar(300)) 
+CREATE or replace PROCEDURE InsertStep(PTaskId INTEGER, PTitle Varchar(30), PDescription Varchar(300)) 
 BEGIN 
-Insert Into Step(TaskId, Title, Description) Values (TaskId, Title, Description); 
+Insert Into Step(TaskId, Title, Description) Values (PTaskId, PTitle, PDescription); 
 END |
 
-CREATE or replace PROCEDURE CheckTask(PIdTask INTEGER) 
-BEGIN 
-	update Task set CheckTask=1 where IdTask=PIdTask;
-END |
 
-CREATE or replace PROCEDURE NotCheckTask(PIdTask INTEGER) 
-BEGIN 
-	update Task set CheckTask=0 where IdTask=PIdTask;
-END |
+/*setters*/
 
-CREATE or replace PROCEDURE CheckStep(PIdTask INTEGER) 
-BEGIN 
-	update Step set CheckStep=1 where IdStep=PIdTask;
-END |
+	/*USERS*/
+	CREATE or replace PROCEDURE SetEmail(PEmailOld varchar(50), PEmailNew varchar(50))
+	BEGIN
+		update Users set Email = PEmailNew where email=PEmailOld;
+	END |
 
-CREATE or replace PROCEDURE NotCheckStep(PIdStep INTEGER) 
-BEGIN 
-	update Step set CheckStep=0 where IdStep=PIdStep;
-END |
+	CREATE or replace PROCEDURE SetPassword(PIdUser varchar(50), PPwdNew varchar(60))
+	BEGIN
+		update Users set Password = PPwdNew where IdUser=PIdUser;
+		update Users set ModifyDate = sysdate();
+	END |
 
-CREATE or replace PROCEDURE NotCheckStep(PIdStep INTEGER) 
-BEGIN 
-	update Step set CheckStep=0 where IdStep=PIdStep;
-END |
+	/*LIST*/
+	CREATE or replace PROCEDURE setTitleList(PUserId INTEGER, PIdList INTEGER, PTitleNew Varchar(30))
+	BEGIN
+		update List set Title = PTitleNew where userId = PUserId and idList = PIdList;
+		update List set ModifyDate = sysdate();
+	END |
+
+	CREATE or replace PROCEDURE setDescriptionList(PUserId INTEGER, PIdList INTEGER, PDescription varchar(300))
+	BEGIN
+		update List set Description = PDescription where userId = PUserId and idList = PIdList;
+		update List set ModifyDate = sysdate();
+	END |
+
+
+
+	/*TASK*/
+	CREATE or replace PROCEDURE SetCheckTask(PIdTask INTEGER, PValue Integer) 
+	BEGIN 
+		update Task set CheckTask=PValue where IdTask=PIdTask;
+		IF (PVALUE=1) THEN
+		update Task set ModifyDate=sysdate() Where IdTask=PIdTask;
+		ELSE
+			update Task set ModifyDate=NULL Where IdTask=PIdTask;
+		END IF;
+	END |
+
+	CREATE or replace PROCEDURE setTitleTask(PIdTask INTEGER, PTitleNew Varchar(30))
+	BEGIN
+		update Task set Title = PTitleNew where IdTask = PIdTask;
+	END |
+
+	CREATE or replace PROCEDURE setDescriptionTask(PIdTask INTEGER, PDescription Varchar(300))
+	BEGIN
+		update Task set Description = PDescription where  IdTask = PIdTask;
+	END |
+
+	CREATE or replace PROCEDURE setDeadlineTask(PIdTask INTEGER, PNewDate Date)
+	BEGIN
+		update Task set Deadline = PNewDate where  IdTask = PIdTask;
+	END |
+
+
+	/*STEP*/
+	CREATE or replace PROCEDURE SetCheckStep(PIdStep INTEGER, PValue Integer) 
+	BEGIN 
+		update Step set CheckStep=PValue where IdStep=PIdStep;
+		IF(PValue=1)THEN
+		update Step set ModifyDate=sysdate() Where IdStep=PIdStep;
+		ELSE
+		update Step set ModifyDate=NULL Where IdStep=PIdStep;
+		END IF;
+	END |
+
+	CREATE or replace PROCEDURE setTitleStep(PIdStep INTEGER, PTitleNew Varchar(30))
+	BEGIN
+		update Step set Title = PTitleNew where IdStep = PIdStep;
+	END |
+
+	CREATE or replace PROCEDURE setDescriptionStep(PIdStep INTEGER, PDescription Varchar(300))
+	BEGIN
+		update Step set Description = PDescription where  IdStep = PIdStep;
+	END |
+
+
+
+
+/*getters*/
 
 CREATE or replace FUNCTION getUserId(PEmail VARCHAR(50)) RETURNS INTEGER 
 BEGIN DECLARE V_id Integer; 
@@ -109,40 +171,88 @@ BEGIN DECLARE V_id Integer;
 RETURN V_id; 
 END |
 
-CREATE or replace FUNCTION getListId(PTitle VARCHAR(30)) RETURNS INTEGER 
+CREATE or replace FUNCTION getListId(PUserId integer, PTitleList VARCHAR(30)) RETURNS INTEGER 
 BEGIN DECLARE V_id Integer; 
-	Select idList INTO V_id from List where Title=PTitle; 
+	Select idList INTO V_id from List where Title=PTitleList and userId=PUserid; 
 RETURN V_id; 
 END |
 
-CREATE or replace FUNCTION getTaskId(PTitle VARCHAR(30)) RETURNS INTEGER 
+CREATE or replace FUNCTION getTaskId(PListId Integer, PTitleTask VARCHAR(30)) RETURNS INTEGER 
 BEGIN DECLARE V_id Integer; 
-	Select idTask INTO V_id from Task where Title=PTitle;
+	Select idTask INTO V_id from Task where Title=PTitleTask and PListId=listId;
 RETURN V_id; 
 END |
 
-CREATE or replace FUNCTION getStepId(PTitle VARCHAR(30)) RETURNS INTEGER 
+CREATE or replace FUNCTION getStepId(PTaskId integer, PTitleStep VARCHAR(30)) RETURNS INTEGER 
 BEGIN DECLARE V_id Integer; 
-	Select idStep INTO V_id from Step where Title=PTitle;
+	Select idStep INTO V_id from Step where Title=PTitleStep and TaskId=PTaskId;
 RETURN V_id; 
 END |
 
-CREATE or replace FUNCTION getNbOfTask(PTitle VARCHAR(30)) RETURNS INTEGER 
-BEGIN DECLARE V_NbTask Integer; 
-	Select Count(idList) INTO V_NbTask from List, Task  where  idlist=listid and List.Title=PTitle;
-RETURN V_NbTask; 
+CREATE or replace FUNCTION getNbOfTask(PListId Integer) RETURNS INTEGER 
+BEGIN DECLARE V_Nb Integer; 
+	Select Count(idTask) INTO V_Nb 
+	from Task  
+	where ListId=PListId;
+RETURN V_Nb; 
 END |
 
-CREATE or replace FUNCTION getDateOfList(PTitle VARCHAR(30)) RETURNS DATE 
+CREATE or replace FUNCTION getNbOfStep(PTaskId integer) RETURNS INTEGER 
+BEGIN DECLARE V_Nb Integer; 
+	Select Count(idStep) INTO V_Nb 
+	from Step  
+	where TaskId=PTaskId;
+RETURN V_Nb;
+END |
+
+CREATE or replace FUNCTION getNbOfStepValid(PTaskId integer) RETURNS INTEGER 
+BEGIN DECLARE V_Nb Integer; 
+	Select Count(idStep) INTO V_Nb 
+	from Step  
+	where TaskId=PTaskId
+	and checkStep = 1;
+RETURN V_Nb;
+END |
+
+CREATE or replace FUNCTION getDateOfList(PIdList VARCHAR(30)) RETURNS DATE 
 BEGIN DECLARE V_Date DATE; 
-	Select CreationDate INTO V_Date from List where Title=PTitle;
+	Select CreationDate INTO V_Date 
+	from List
+	where idList=PIdList;
 RETURN V_Date; 
 END |
+
+CREATE or replace FUNCTION getPassword(PEmail VARCHAR(50)) RETURNS VARCHAR(60) 
+BEGIN DECLARE V_Pwd VARCHAR(60); 
+	Select Password INTO V_Pwd from Users where email=PEmail;
+RETURN V_Pwd; 
+END |
+
+
+/*DELETE*/
+
+CREATE or replace PROCEDURE deleteUser(PIdUser INTEGER)
+BEGIN
+	Delete From Users where IdUser=PIdUser;
+END |
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 DELIMITER ;
 
 
-
+/*LIST_DATA*/
 DELIMITER $$
 CREATE or replace FUNCTION getLists(PuserId INTEGER) RETURNS VARCHAR(4000)
 BEGIN
