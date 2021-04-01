@@ -1,7 +1,14 @@
+/*
 DROP TABLE Users;
 DROP TABLE List;
 DROP TABLE Task;
 DROP TABLE Step;
+*/
+
+/*Créer la base*/
+CREATE DATABASE toDoList;
+
+/*selectionner la bdd puis lancer le reste du script*/
 
 CREATE TABLE Users(
 IdUser INTEGER AUTO_INCREMENT PRIMARY KEY,
@@ -52,14 +59,13 @@ ALTER TABLE List ENGINE InnoDB;
 ALTER TABLE Task ENGINE InnoDB;
 ALTER TABLE Step ENGINE InnoDB;
 ALTER TABLE Users ADD CONSTRAINT UNIQUE_Email UNIQUE(Email);
-ALTER TABLE List ADD CONSTRAINT FK_Users_List FOREIGN KEY (userId) REFERENCES USERS(IdUser);
-ALTER TABLE Task ADD CONSTRAINT FK_Task_List FOREIGN KEY (ListId) REFERENCES LIST(IdList);
+ALTER TABLE List ADD CONSTRAINT FK_Users_List FOREIGN KEY (userId) REFERENCES USERS(IdUser) ON DELETE CASCADE;
+ALTER TABLE Task ADD CONSTRAINT FK_Task_List FOREIGN KEY (ListId) REFERENCES LIST(IdList) ON DELETE CASCADE;
 ALTER TABLE Task ADD CONSTRAINT CK_Dealine CHECK (deadline>=CreationDate);
-ALTER TABLE Step ADD CONSTRAINT FK_Step_Task FOREIGN KEY (TaskId) REFERENCES Task(IdTask);
+ALTER TABLE Step ADD CONSTRAINT FK_Step_Task FOREIGN KEY (TaskId) REFERENCES Task(IdTask) ON DELETE CASCADE;
 
 
 DELIMITER |
-
 
 /*Insert*/
 CREATE or replace PROCEDURE InsertUser(PEmail Varchar(50), PPassword Varchar(60)) 
@@ -85,80 +91,80 @@ END |
 
 /*setters*/
 
-	/*USERS*/
-	CREATE or replace PROCEDURE SetEmail(PEmailOld varchar(50), PEmailNew varchar(50))
-	BEGIN
-		update Users set Email = PEmailNew where email=PEmailOld;
-	END |
+/*USERS*/
+CREATE or replace PROCEDURE SetEmail(PEmailOld varchar(50), PEmailNew varchar(50))
+BEGIN
+	update Users set Email = PEmailNew where email=PEmailOld;
+END |
 
-	CREATE or replace PROCEDURE SetPassword(PIdUser varchar(50), PPwdNew varchar(60))
-	BEGIN
-		update Users set Password = PPwdNew where IdUser=PIdUser;
-		update Users set ModifyDate = sysdate();
-	END |
+CREATE or replace PROCEDURE SetPassword(PIdUser varchar(50), PPwdNew varchar(60))
+BEGIN
+	update Users set Password = PPwdNew where IdUser=PIdUser;
+	update Users set ModifyDate = sysdate();
+END |
 
-	/*LIST*/
-	CREATE or replace PROCEDURE setTitleList(PUserId INTEGER, PIdList INTEGER, PTitleNew Varchar(30))
-	BEGIN
-		update List set Title = PTitleNew where userId = PUserId and idList = PIdList;
-		update List set ModifyDate = sysdate();
-	END |
+/*LIST*/
+CREATE or replace PROCEDURE setTitleList(PUserId INTEGER, PIdList INTEGER, PTitleNew Varchar(30))
+BEGIN
+	update List set Title = PTitleNew where userId = PUserId and idList = PIdList;
+	update List set ModifyDate = sysdate();
+END |
 
-	CREATE or replace PROCEDURE setDescriptionList(PUserId INTEGER, PIdList INTEGER, PDescription varchar(300))
-	BEGIN
-		update List set Description = PDescription where userId = PUserId and idList = PIdList;
-		update List set ModifyDate = sysdate();
-	END |
-
-
-
-	/*TASK*/
-	CREATE or replace PROCEDURE SetCheckTask(PIdTask INTEGER, PValue Integer) 
-	BEGIN 
-		update Task set CheckTask=PValue where IdTask=PIdTask;
-		IF (PVALUE=1) THEN
-		update Task set ModifyDate=sysdate() Where IdTask=PIdTask;
-		ELSE
-			update Task set ModifyDate=NULL Where IdTask=PIdTask;
-		END IF;
-	END |
-
-	CREATE or replace PROCEDURE setTitleTask(PIdTask INTEGER, PTitleNew Varchar(30))
-	BEGIN
-		update Task set Title = PTitleNew where IdTask = PIdTask;
-	END |
-
-	CREATE or replace PROCEDURE setDescriptionTask(PIdTask INTEGER, PDescription Varchar(300))
-	BEGIN
-		update Task set Description = PDescription where  IdTask = PIdTask;
-	END |
-
-	CREATE or replace PROCEDURE setDeadlineTask(PIdTask INTEGER, PNewDate Date)
-	BEGIN
-		update Task set Deadline = PNewDate where  IdTask = PIdTask;
-	END |
+CREATE or replace PROCEDURE setDescriptionList(PUserId INTEGER, PIdList INTEGER, PDescription varchar(300))
+BEGIN
+	update List set Description = PDescription where userId = PUserId and idList = PIdList;
+	update List set ModifyDate = sysdate();
+END |
 
 
-	/*STEP*/
-	CREATE or replace PROCEDURE SetCheckStep(PIdStep INTEGER, PValue Integer) 
-	BEGIN 
-		update Step set CheckStep=PValue where IdStep=PIdStep;
-		IF(PValue=1)THEN
-		update Step set ModifyDate=sysdate() Where IdStep=PIdStep;
-		ELSE
-		update Step set ModifyDate=NULL Where IdStep=PIdStep;
-		END IF;
-	END |
 
-	CREATE or replace PROCEDURE setTitleStep(PIdStep INTEGER, PTitleNew Varchar(30))
-	BEGIN
-		update Step set Title = PTitleNew where IdStep = PIdStep;
-	END |
+/*TASK*/
+CREATE or replace PROCEDURE SetCheckTask(PIdTask INTEGER, PValue Integer) 
+BEGIN 
+	update Task set CheckTask=PValue where IdTask=PIdTask;
+	IF (PVALUE=1) THEN
+	update Task set ModifyDate=sysdate() Where IdTask=PIdTask;
+	ELSE
+		update Task set ModifyDate=NULL Where IdTask=PIdTask;
+	END IF;
+END |
 
-	CREATE or replace PROCEDURE setDescriptionStep(PIdStep INTEGER, PDescription Varchar(300))
-	BEGIN
-		update Step set Description = PDescription where  IdStep = PIdStep;
-	END |
+CREATE or replace PROCEDURE setTitleTask(PIdTask INTEGER, PTitleNew Varchar(30))
+BEGIN
+	update Task set Title = PTitleNew where IdTask = PIdTask;
+END |
+
+CREATE or replace PROCEDURE setDescriptionTask(PIdTask INTEGER, PDescription Varchar(300))
+BEGIN
+	update Task set Description = PDescription where  IdTask = PIdTask;
+END |
+
+CREATE or replace PROCEDURE setDeadlineTask(PIdTask INTEGER, PNewDate Date)
+BEGIN
+	update Task set Deadline = PNewDate where  IdTask = PIdTask;
+END |
+
+
+/*STEP*/
+CREATE or replace PROCEDURE SetCheckStep(PIdStep INTEGER, PValue Integer) 
+BEGIN 
+	update Step set CheckStep=PValue where IdStep=PIdStep;
+	IF(PValue=1)THEN
+	update Step set ModifyDate=sysdate() Where IdStep=PIdStep;
+	ELSE
+	update Step set ModifyDate=NULL Where IdStep=PIdStep;
+	END IF;
+END |
+
+CREATE or replace PROCEDURE setTitleStep(PIdStep INTEGER, PTitleNew Varchar(30))
+BEGIN
+	update Step set Title = PTitleNew where IdStep = PIdStep;
+END |
+
+CREATE or replace PROCEDURE setDescriptionStep(PIdStep INTEGER, PDescription Varchar(300))
+BEGIN
+	update Step set Description = PDescription where  IdStep = PIdStep;
+END |
 
 
 
@@ -231,51 +237,111 @@ END |
 
 /*DELETE*/
 
+CREATE or replace PROCEDURE deleteStep(PIdStep INTEGER)
+BEGIN
+	Delete From Step where IdStep=PIdStep;
+END |
+
+CREATE or replace PROCEDURE deleteTask(PIdTask INTEGER)
+BEGIN
+	Delete From Task where IdTask=PIdTask;
+END |
+
+CREATE or replace PROCEDURE deleteList(PIdList INTEGER)
+BEGIN
+	Delete From List where IdList=PIdList;
+END |
+
+
 CREATE or replace PROCEDURE deleteUser(PIdUser INTEGER)
 BEGIN
 	Delete From Users where IdUser=PIdUser;
 END |
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-DELIMITER ;
-
-
 /*LIST_DATA*/
-DELIMITER $$
-CREATE or replace FUNCTION getLists(PuserId INTEGER) RETURNS VARCHAR(4000)
+CREATE or replace FUNCTION getUserLists(PuserId INTEGER) RETURNS VARCHAR(4000)
 BEGIN
     DECLARE finished INTEGER DEFAULT 0;
 	DECLARE V_Liste VARCHAR(4000);
-    DECLARE V_Title VARCHAR(300) DEFAULT '';
+    DECLARE V_Infos VARCHAR(300) DEFAULT '';
 	
     DECLARE C_Liste 
 		CURSOR FOR 
-			Select Title from List where userId = PuserId order by CreationDate DESC; 
+			Select CONCAT_WS('|', Title, Description, CONVERT(CreationDate,VARCHAR(10)))
+			from List 
+			where userId = PuserId 
+			order by CreationDate DESC; 
 			
     DECLARE CONTINUE HANDLER
     FOR NOT FOUND SET finished = 1;
     OPEN C_Liste;
         getList:LOOP
-            FETCH C_Liste INTO V_title;
+            FETCH C_Liste INTO V_Infos;
             IF finished = 1 THEN 
                 LEAVE getList;
             END IF;
-            SET V_Liste = CONCAT_WS('#',V_Liste, V_title);
+            SET V_Liste = CONCAT_WS('#',V_Liste, V_Infos);
 		END LOOP getList;
     CLOSE C_Liste;
 	
 RETURN V_Liste; 
-END $$
+END |
+
+CREATE or replace FUNCTION getListTasks(PListId INTEGER) RETURNS VARCHAR(4000)
+BEGIN
+    DECLARE finished INTEGER DEFAULT 0;
+	DECLARE V_Liste VARCHAR(4000);
+    DECLARE V_Infos VARCHAR(300) DEFAULT '';
+	
+    DECLARE C_Liste 
+		CURSOR FOR 
+			Select CONCAT_WS('|', Title, Description, CONVERT(CheckTask, CHAR(1)), CONVERT(Deadline,VARCHAR(10)), CONVERT(CreationDate,VARCHAR(10))) 
+			from Task 
+			where listId = PListId 
+			order by Deadline DESC; 
+			
+    DECLARE CONTINUE HANDLER
+    FOR NOT FOUND SET finished = 1;
+    OPEN C_Liste;
+        getList:LOOP
+            FETCH C_Liste INTO V_Infos;
+            IF finished = 1 THEN 
+                LEAVE getList;
+            END IF;
+            SET V_Liste = CONCAT_WS('#',V_Liste, V_Infos);
+		END LOOP getList;
+    CLOSE C_Liste;
+	
+RETURN V_Liste; 
+END |
+
+CREATE or replace FUNCTION getTaskSteps(PTaskId INTEGER) RETURNS VARCHAR(4000)
+BEGIN
+    DECLARE finished INTEGER DEFAULT 0;
+	DECLARE V_Liste VARCHAR(4000);
+    DECLARE V_Infos VARCHAR(300) DEFAULT '';
+	
+    DECLARE C_Liste 
+		CURSOR FOR 
+			Select CONCAT_WS('|', Title, Description, CONVERT(CheckStep, CHAR(1)))
+			from Step 
+			where TaskId = PTaskId 
+			order by CreationDate ASC; 
+			
+    DECLARE CONTINUE HANDLER
+    FOR NOT FOUND SET finished = 1;
+    OPEN C_Liste;
+        getList:LOOP
+            FETCH C_Liste INTO V_Infos;
+            IF finished = 1 THEN 
+                LEAVE getList;
+            END IF;
+            SET V_Liste = CONCAT_WS('#',V_Liste, V_Infos);
+		END LOOP getList;
+    CLOSE C_Liste;
+	
+RETURN V_Liste; 
+END |
+
 DELIMITER ;
