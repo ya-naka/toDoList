@@ -268,7 +268,7 @@ BEGIN
 	
     DECLARE C_Liste 
 		CURSOR FOR 
-			Select CONCAT_WS('|', Title, Description, CONVERT(CreationDate,VARCHAR(10)))
+			Select CONCAT_WS('¤', Title, Description, CONVERT(CreationDate,VARCHAR(10)))
 			from List 
 			where userId = PuserId 
 			order by CreationDate DESC; 
@@ -281,7 +281,7 @@ BEGIN
             IF finished = 1 THEN 
                 LEAVE getList;
             END IF;
-            SET V_Liste = CONCAT_WS('#',V_Liste, V_Infos);
+            SET V_Liste = CONCAT_WS('£',V_Liste, V_Infos);
 		END LOOP getList;
     CLOSE C_Liste;
 	
@@ -296,7 +296,7 @@ BEGIN
 	
     DECLARE C_Liste 
 		CURSOR FOR 
-			Select CONCAT_WS('|', Title, Description, CONVERT(CheckTask, CHAR(1)), CONVERT(Deadline,VARCHAR(10)), CONVERT(CreationDate,VARCHAR(10))) 
+			Select CONCAT_WS('¤', Title, Description, CONVERT(CheckTask, CHAR(1)), CONVERT(Deadline,VARCHAR(10)), CONVERT(CreationDate,VARCHAR(10))) 
 			from Task 
 			where listId = PListId 
 			order by Deadline DESC; 
@@ -309,7 +309,7 @@ BEGIN
             IF finished = 1 THEN 
                 LEAVE getList;
             END IF;
-            SET V_Liste = CONCAT_WS('#',V_Liste, V_Infos);
+            SET V_Liste = CONCAT_WS('£',V_Liste, V_Infos);
 		END LOOP getList;
     CLOSE C_Liste;
 	
@@ -324,7 +324,7 @@ BEGIN
 	
     DECLARE C_Liste 
 		CURSOR FOR 
-			Select CONCAT_WS('|', Title, Description, CONVERT(CheckStep, CHAR(1)))
+			Select CONCAT_WS('¤', Title, Description, CONVERT(CheckStep, CHAR(1)))
 			from Step 
 			where TaskId = PTaskId 
 			order by CreationDate ASC; 
@@ -337,7 +337,7 @@ BEGIN
             IF finished = 1 THEN 
                 LEAVE getList;
             END IF;
-            SET V_Liste = CONCAT_WS('#',V_Liste, V_Infos);
+            SET V_Liste = CONCAT_WS('£',V_Liste, V_Infos);
 		END LOOP getList;
     CLOSE C_Liste;
 	
