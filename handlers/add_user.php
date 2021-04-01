@@ -17,6 +17,7 @@ try{
     $request->execute([$_POST["email"], $password]);
     $error = "none";
 }catch(Exception $e){
+    //ajouter une requête pour savoir si l'email existe déjà dans la base
     $error = "erreur lors de la création du compte";
 }
 
