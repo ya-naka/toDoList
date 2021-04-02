@@ -1,12 +1,12 @@
 <?php
-
-if(!isset($_GET["email"])){
+header("Content-Type: application/json; charset=UTF-8");
+if(!isset($_SESSION["user"])){
     echo json_encode(["message" => "utilisateur inconnu"]);
     exit;
 }
 
-$request = $db->prepare("SELECT getUserLists(getUserId(?))");
-$request->execute([$_GET["email"]]);
+$request = $db->prepare("SELECT getUserLists(?)");
+$request->execute([$_SESSION["user"]["IdUser"]]);
 $lists = $request->fetch();
 var_dump($lists);
 
@@ -27,9 +27,8 @@ for($i = 0; $i < sizeof($list); $i++){
 }
 
 
-//$message = "";
+$message = "";
 
-relocation:
 echo json_encode([
     "lists" => $list,
     "message" => $message,

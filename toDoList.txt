@@ -177,21 +177,21 @@ BEGIN DECLARE V_id Integer;
 RETURN V_id; 
 END |
 
-CREATE or replace FUNCTION getListId(PUserId integer, PTitleList VARCHAR(30)) RETURNS INTEGER 
+CREATE or replace FUNCTION getListId(PUserId integer, PIdList INTEGER) RETURNS INTEGER 
 BEGIN DECLARE V_id Integer; 
-	Select idList INTO V_id from List where Title=PTitleList and userId=PUserid; 
+	Select idList INTO V_id from List where IdList=PIdList and userId=PUserid; 
 RETURN V_id; 
 END |
 
-CREATE or replace FUNCTION getTaskId(PListId Integer, PTitleTask VARCHAR(30)) RETURNS INTEGER 
+CREATE or replace FUNCTION getTaskId(PListId Integer, PIdTask INTEGER) RETURNS INTEGER 
 BEGIN DECLARE V_id Integer; 
-	Select idTask INTO V_id from Task where Title=PTitleTask and PListId=listId;
+	Select idTask INTO V_id from Task where IdTask=PIdTask and PListId=listId;
 RETURN V_id; 
 END |
 
-CREATE or replace FUNCTION getStepId(PTaskId integer, PTitleStep VARCHAR(30)) RETURNS INTEGER 
+CREATE or replace FUNCTION getStepId(PTaskId integer, PIdStep INTEGER) RETURNS INTEGER 
 BEGIN DECLARE V_id Integer; 
-	Select idStep INTO V_id from Step where Title=PTitleStep and TaskId=PTaskId;
+	Select idStep INTO V_id from Step where IdStep=PIdStep and TaskId=PTaskId;
 RETURN V_id; 
 END |
 
@@ -296,7 +296,7 @@ BEGIN
 	
     DECLARE C_Liste 
 		CURSOR FOR 
-			Select CONCAT_WS('¤', Title, Description, CONVERT(CheckTask, CHAR(1)), CONVERT(Deadline,VARCHAR(10)), CONVERT(CreationDate,VARCHAR(10))) 
+			Select CONCAT_WS('¤', IdTask, ListId, Title, Description, CONVERT(CheckTask, CHAR(1)), CONVERT(Deadline,VARCHAR(10)), CONVERT(CreationDate,VARCHAR(10)), CONVERT(ModifyDate,VARCHAR(10))) 
 			from Task 
 			where listId = PListId 
 			order by Deadline DESC; 
@@ -324,7 +324,7 @@ BEGIN
 	
     DECLARE C_Liste 
 		CURSOR FOR 
-			Select CONCAT_WS('¤', Title, Description, CONVERT(CheckStep, CHAR(1)))
+			Select CONCAT_WS('¤', IdStep, Title, Description, CONVERT(CheckStep, CHAR(1)))
 			from Step 
 			where TaskId = PTaskId 
 			order by CreationDate ASC; 
