@@ -25,5 +25,6 @@ $routes = [
     "/delete_list" => "delete_list",
     "/update_mail" => "update_mail",
     "/update_password" => "update_password",
+    "/get_lists" => "get_lists",
     "/error" => "error",
 ];

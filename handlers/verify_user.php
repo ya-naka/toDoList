@@ -1,8 +1,11 @@
 <?php
 
+header("Content-Type: application/json; charset=UTF-8");
 if(!isset($_POST["email"]) || !isset($_POST["password"])){
-    $message = "remplir tous les champs";
-    goto relocation;
+    echo json_encode([
+        "message" => "remplir tous les champs",
+    ]);
+    exit;
 }
 
 $request = $db->prepare("SELECT * FROM users WHERE Email=?");
@@ -10,24 +13,24 @@ $request->execute([$_POST["email"]]);
 $user = $request->fetch();
 
 if (!$user){
-    $message = "user inconnu";
-    goto relocation;
+    echo json_encode([
+        "message" => "user inconnu",
+    ]);
+    exit;
 }
 
 $ok = password_verify($_POST["password"], $user["Password"]);
 
 if(!$ok){
-    $message = "mauvais mdp";
-    goto relocation;
+    echo json_encode([
+        "message" => "mauvais mdp",
+    ]);
+    exit;
 }
 
 $_SESSION["user"] = $user;
-$message = "OK";
 
-relocation:
-
-header("Content-Type: application/json; charset=UTF-8");
-echo json_encode("");
-
-//header("Location: ".uri("/signin"));
-//exit;
+echo json_encode([
+    "message" => "OK",
+    "user" => $user,
+]);

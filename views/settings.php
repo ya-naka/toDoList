@@ -11,8 +11,8 @@
 		<nav id="menu-lists">
 			<span class="title">Mes listes</span>
 			<ul>
-				<!-- javascript à la place du lien ?--><li><a href="/list/{id}" title="{nom}">{nom très long qui va probablement toucher le badge à droite}<div class="badge">25</div></a></li>
-				<!-- javascript à la place du lien ?--><li><a href="/list/{id}" title="{nom}">{nom}<div class="badge">3</div></a></li>
+				<li><a href="/list/{id}" title="{nom}">{nom très long qui va probablement toucher le badge à droite}<div class="badge">25</div></a></li>
+				<li><a href="/list/{id}" title="{nom}">{nom}<div class="badge">3</div></a></li>
 			</ul>
 		</nav>
 		<a href="<?= uri("/add_list") ?>" id="menu-new-list" title="Nouvelle liste">Nouvelle liste</a>

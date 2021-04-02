@@ -268,7 +268,7 @@ BEGIN
 	
     DECLARE C_Liste 
 		CURSOR FOR 
-			Select CONCAT_WS('¤', Title, Description, CONVERT(CreationDate,VARCHAR(10)))
+			Select CONCAT_WS('¤', IdList, Title, Description, CONVERT(CreationDate,VARCHAR(10)))
 			from List 
 			where userId = PuserId 
 			order by CreationDate DESC; 
