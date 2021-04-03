@@ -16,16 +16,10 @@ $description = !isset($_GET["Description"]) ? "" : substr($_GET["Description"], 
 $checked = !isset($_GET["Checked"]) ? "" : substr($_GET["Checked"], 0, $parameters["Checked"]);
 
 try{
-    $request = $db->prepare("CALL setTitleList(?,?,?)");
-    $request->execute([$_GET["IdStep"],$title, $description, $checked]);
+    $request = $db->prepare("CALL setStep(?,?,?)");
+    $request->execute([$_GET["IdStep"],$title, $description]);
 }catch(Exception $e){
     echo json_encode(["message" => messageException($e)]);
-    exit;
-}
-
-$verify_request = $request->rowCount();
-if($verify_request <= 0){
-    echo json_encode(["message" => "erreur lors de la modification de l'etape"]);
     exit;
 }
 

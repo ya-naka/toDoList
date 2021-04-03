@@ -102,14 +102,14 @@ BEGIN
 	update Users set ModifyDate = sysdate();
 END |
 
-CREATE or replace PROCEDURE setList(PUserId INTEGER, PIdList INTEGER, PTitleNew Varchar(30), PDescription Varchar(300))
+CREATE or replace PROCEDURE setList(PIdList INTEGER, PTitleNew Varchar(30), PDescription Varchar(300))
 BEGIN
 	IF LENGTH(PTitleNew)>0 THEN
-	update List set Title = PTitleNew where userId = PUserId and idList = PIdList;
+	update List set Title = PTitleNew where idList = PIdList;
 	update List set ModifyDate = sysdate();
 	END IF;
 	IF LENGTH(PDescription)>0 THEN
-	update List set Description = PDescription where userId = PUserId and idList = PIdList;
+	update List set Description = PDescription where idList = PIdList;
 	update List set ModifyDate = sysdate();
 	END IF;	
 END |
@@ -124,15 +124,19 @@ BEGIN
 	END IF;
 END |
 
-CREATE or replace PROCEDURE setTask(PIdTask INTEGER, PTitleNew Varchar(30), PDescription Varchar(300))
+CREATE or replace PROCEDURE setTask(PIdTask INTEGER, PTitleNew Varchar(30), PDescription Varchar(300), PDeadline DATE)
 BEGIN
 	IF LENGTH(PTitleNew)>0 THEN
 		update Task set Title = PTitleNew where IdTask = PIdTask;
-		update List set ModifyDate = sysdate();
+		update Task set ModifyDate = sysdate();
 	END IF;
 	IF LENGTH(PDescription)>0 THEN
 		update Task set Description = PDescription where  IdTask = PIdTask;
-		update List set ModifyDate = sysdate();
+		update Task set ModifyDate = sysdate();
+	END IF;
+    IF LENGTH(CONVERT(PDeadline, VARCHAR(10)))>0 THEN
+		update Task set Deadline = PDeadline where  IdTask = PIdTask;
+		update Task set ModifyDate = sysdate();
 	END IF;
 END |
 
