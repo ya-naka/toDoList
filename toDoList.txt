@@ -104,6 +104,14 @@ BEGIN
 END |
 
 /*LIST*/
+
+CREATE or replace PROCEDURE setList(PUserId INTEGER, PIdList INTEGER, PTitleNew Varchar(30), PDescription Varchar(300))
+BEGIN
+	update List set Title = PTitleNew where userId = PUserId and idList = PIdList;
+    update List set Description = PDescription where userId = PUserId and idList = PIdList;
+	update List set ModifyDate = sysdate();
+END |
+
 CREATE or replace PROCEDURE setTitleList(PUserId INTEGER, PIdList INTEGER, PTitleNew Varchar(30))
 BEGIN
 	update List set Title = PTitleNew where userId = PUserId and idList = PIdList;
@@ -119,6 +127,8 @@ END |
 
 
 /*TASK*/
+
+
 CREATE or replace PROCEDURE SetCheckTask(PIdTask INTEGER, PValue Integer) 
 BEGIN 
 	update Task set CheckTask=PValue where IdTask=PIdTask;
@@ -127,6 +137,12 @@ BEGIN
 	ELSE
 		update Task set ModifyDate=NULL Where IdTask=PIdTask;
 	END IF;
+END |
+
+CREATE or replace PROCEDURE setTask(PIdTask INTEGER, PTitleNew Varchar(30), PDescription Varchar(300))
+BEGIN
+	update Task set Title = PTitleNew where IdTask = PIdTask;
+	update Task set Description = PDescription where IdTask = PIdTask;
 END |
 
 CREATE or replace PROCEDURE setTitleTask(PIdTask INTEGER, PTitleNew Varchar(30))
@@ -155,6 +171,13 @@ BEGIN
 	update Step set ModifyDate=NULL Where IdStep=PIdStep;
 	END IF;
 END |
+
+CREATE or replace PROCEDURE setStep(PIdStep INTEGER, PTitleNew Varchar(30), PDescription Varchar(300))
+BEGIN
+	update Step set Title = PTitleNew where IdStep = PIdStep;
+	update Step set Description = PDescription where  IdStep = PIdStep;
+END |
+
 
 CREATE or replace PROCEDURE setTitleStep(PIdStep INTEGER, PTitleNew Varchar(30))
 BEGIN
