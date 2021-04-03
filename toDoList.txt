@@ -349,8 +349,9 @@ END |
 DROP TRIGGER IF EXISTS VerifyTitleList |
 DROP TRIGGER IF EXISTS VerifyTitleTask |
 DROP TRIGGER IF EXISTS VerifyTitleStep |
-DROP TRIGGER IF EXISTS VerifyInsertEmail |
+DROP TRIGGER IF EXISTS VerifyUniqueEmail |
 DROP TRIGGER IF EXISTS VerifyDeadlineTask |
+DROP TRIGGER IF EXISTS VerifyNotNullEmailPassword |
 
 CREATE TRIGGER VerifyTitleList 
 BEFORE INSERT ON list 
@@ -379,7 +380,7 @@ signal sqlstate '20001' SET MESSAGE_TEXT = 'Le titre de l''etape ne peut pas etr
 END IF; 
 END |
 
-CREATE TRIGGER VerifyInsertEmail 
+CREATE TRIGGER VerifyUniqueEmail
 BEFORE INSERT ON users 
 FOR EACH ROW 
 BEGIN 
@@ -387,6 +388,16 @@ DECLARE V_email VARCHAR(30);
 SELECT Email INTO V_email FROM users WHERE Email=new.Email;
 IF LENGTH(V_email)>0 THEN 
 signal sqlstate '20002' SET MESSAGE_TEXT = 'Cet email existe deja';
+END IF; 
+END |
+
+
+CREATE TRIGGER VerifyNotNullEmailPassWord
+BEFORE INSERT ON users 
+FOR EACH ROW 
+BEGIN 
+IF LENGTH(New.email)=0 or LENGTH(New.Password)=0 THEN 
+signal sqlstate '20002' SET MESSAGE_TEXT = 'L''email ou le passord ne peut etre nul';
 END IF; 
 END |
 
