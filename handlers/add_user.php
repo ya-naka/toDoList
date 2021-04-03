@@ -1,4 +1,6 @@
 <?php
+
+header("Content-Type: application/json; charset=UTF-8");
 if(!isset($_POST["email"]) || !isset($_POST["password"]) || !isset($_POST["password_conf"])){
     echo json_encode([
         "message" => "veuillez remplir tous les champs",

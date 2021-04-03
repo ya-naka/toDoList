@@ -1,4 +1,6 @@
 <?php
+
+header("Content-Type: application/json; charset=UTF-8");
 if(!isset($_GET["IdUser"])){
     echo json_encode([
         "message" => "Utilisateur introuvable",

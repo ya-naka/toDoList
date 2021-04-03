@@ -1,4 +1,6 @@
 <?php
+
+header("Content-Type: application/json; charset=UTF-8");
 if(!isset($_GET["IdTask"])){
     echo json_encode(["message" => "Tache introuvable"]);
     exit;
@@ -27,9 +29,9 @@ try{
 
 $verify_request = $request->rowCount();
 if($verify_request <= 0){
-    echo json_encode(["message" => "erreur lors de la modification de la liste"]);
+    echo json_encode(["message" => "erreur lors de la modification de la tache"]);
     exit;
 }
 
-echo json_encode(["message" => "La liste a bien ete modifiee"]);
+echo json_encode(["message" => "La tache a bien ete modifiee"]);
 exit;
