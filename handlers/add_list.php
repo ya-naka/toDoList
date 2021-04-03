@@ -27,3 +27,5 @@ if($verify_request <= 0){
 
 echo json_encode(["message" => "La liste a bien ete ajoutee"]);
 exit;
+
+
