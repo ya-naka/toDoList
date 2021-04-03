@@ -12,8 +12,6 @@ $description = !isset($_GET["Description"]) ? "" : substr($_GET["Description"], 
 try{
     $request = $db->prepare("CALL InsertList(?,?,?)");
     $request->execute([$_SESSION["user"]["IdUser"],$title, $description]);
-    
-
 }catch(Exception $e){
     echo json_encode(["message" => messageException($e)]);
     exit;
