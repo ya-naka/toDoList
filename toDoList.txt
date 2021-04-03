@@ -346,14 +346,25 @@ END |
 
 
 /*TRIGGER*/
-DROP TRIGGER IF EXISTS VerifyTitleList |
-DROP TRIGGER IF EXISTS VerifyTitleTask |
-DROP TRIGGER IF EXISTS VerifyTitleStep |
-DROP TRIGGER IF EXISTS VerifyUniqueEmail |
-DROP TRIGGER IF EXISTS VerifyDeadlineTask |
-DROP TRIGGER IF EXISTS VerifyNotNullEmailPassword |
+DROP TRIGGER IF EXISTS BiVerifyTitleList |
+DROP TRIGGER IF EXISTS BuVerifyTitleList |
 
-CREATE TRIGGER VerifyTitleList 
+DROP TRIGGER IF EXISTS BiVerifyTitleTask |
+DROP TRIGGER IF EXISTS BuVerifyTitleTask |
+
+DROP TRIGGER IF EXISTS BiVerifyTitleStep |
+DROP TRIGGER IF EXISTS BuVerifyTitleStep |
+
+DROP TRIGGER IF EXISTS BiVerifyUniqueEmail |
+DROP TRIGGER IF EXISTS BuVerifyUniqueEmail |
+
+DROP TRIGGER IF EXISTS BiVerifyDeadlineTask |
+DROP TRIGGER IF EXISTS BuVerifyDeadlineTask |
+
+DROP TRIGGER IF EXISTS BiVerifyNotNullEmailPassword |
+DROP TRIGGER IF EXISTS BuVerifyNotNullEmailPassword |
+
+CREATE TRIGGER BiVerifyTitleList 
 BEFORE INSERT ON list 
 FOR EACH ROW 
 BEGIN 
@@ -362,7 +373,16 @@ signal sqlstate '20001' SET MESSAGE_TEXT = 'Le titre de la liste ne peut pas etr
 END IF; 
 END |
 
-CREATE TRIGGER VerifyTitleTask 
+CREATE TRIGGER BuVerifyTitleList 
+BEFORE UPDATE ON list 
+FOR EACH ROW 
+BEGIN 
+IF LENGTH(NEW.Title)=0 THEN 
+signal sqlstate '20001' SET MESSAGE_TEXT = 'Le titre de la liste ne peut pas etre nul';
+END IF; 
+END |
+
+CREATE TRIGGER BiVerifyTitleTask
 BEFORE INSERT ON task 
 FOR EACH ROW 
 BEGIN 
@@ -371,7 +391,16 @@ signal sqlstate '20001' SET MESSAGE_TEXT = 'Le titre de la tache ne peut pas etr
 END IF; 
 END |
 
-CREATE TRIGGER VerifyTitleStep
+CREATE TRIGGER BuVerifyTitleTask
+BEFORE UPDATE ON task 
+FOR EACH ROW 
+BEGIN 
+IF LENGTH(NEW.Title)=0 THEN 
+signal sqlstate '20001' SET MESSAGE_TEXT = 'Le titre de la tache ne peut pas etre nul';
+END IF; 
+END |
+
+CREATE TRIGGER BiVerifyTitleStep
 BEFORE INSERT ON step 
 FOR EACH ROW 
 BEGIN 
@@ -380,7 +409,16 @@ signal sqlstate '20001' SET MESSAGE_TEXT = 'Le titre de l''etape ne peut pas etr
 END IF; 
 END |
 
-CREATE TRIGGER VerifyUniqueEmail
+CREATE TRIGGER BuVerifyTitleStep
+BEFORE UPDATE ON step 
+FOR EACH ROW 
+BEGIN 
+IF LENGTH(NEW.Title)=0 THEN 
+signal sqlstate '20001' SET MESSAGE_TEXT = 'Le titre de l''etape ne peut pas etre nul';
+END IF; 
+END |
+
+CREATE TRIGGER BiVerifyUniqueEmail
 BEFORE INSERT ON users 
 FOR EACH ROW 
 BEGIN 
@@ -391,8 +429,36 @@ signal sqlstate '20002' SET MESSAGE_TEXT = 'Cet email existe deja';
 END IF; 
 END |
 
+CREATE TRIGGER BuVerifyUniqueEmail
+BEFORE UPDATE ON users 
+FOR EACH ROW 
+BEGIN 
+DECLARE V_email VARCHAR(30);
+SELECT Email INTO V_email FROM users WHERE Email=new.Email;
+IF LENGTH(V_email)>0 THEN 
+signal sqlstate '20002' SET MESSAGE_TEXT = 'Cet email existe deja';
+END IF; 
+END |
 
-CREATE TRIGGER VerifyNotNullEmailPassWord
+CREATE TRIGGER BiVerifyDeadlineTask
+BEFORE INSERT ON Task 
+FOR EACH ROW 
+BEGIN 
+IF New.Deadline<sysdate() THEN 
+signal sqlstate '20002' SET MESSAGE_TEXT = 'la tache ne peut etre terminee avant sa date de creation'; 
+END IF; 
+END |
+
+CREATE TRIGGER BuVerifyDeadlineTask
+BEFORE UPDATE ON Task 
+FOR EACH ROW 
+BEGIN 
+IF New.Deadline<sysdate() THEN 
+signal sqlstate '20002' SET MESSAGE_TEXT = 'la tache ne peut etre terminee avant sa date de creation'; 
+END IF; 
+END |
+
+CREATE TRIGGER BiVerifyNotNullEmailPassword
 BEFORE INSERT ON users 
 FOR EACH ROW 
 BEGIN 
@@ -401,12 +467,13 @@ signal sqlstate '20002' SET MESSAGE_TEXT = 'L''email ou le passord ne peut etre 
 END IF; 
 END |
 
-CREATE TRIGGER VerifyDeadlineTask 
-BEFORE INSERT ON Task 
+CREATE TRIGGER BuVerifyNotNullEmailPassword
+BEFORE UPDATE ON users 
 FOR EACH ROW 
 BEGIN 
-IF New.Deadline<sysdate() THEN 
-signal sqlstate '20002' SET MESSAGE_TEXT = 'la tache ne peut etre terminee avant sa date de creation'; 
+IF LENGTH(New.email)=0 or LENGTH(New.Password)=0 THEN 
+signal sqlstate '20002' SET MESSAGE_TEXT = 'L''email ou le passord ne peut etre nul';
 END IF; 
 END |
+
 DELIMITER ;
