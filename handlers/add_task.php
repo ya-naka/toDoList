@@ -1,6 +1,4 @@
 <?php
-header("Content-Type: application/json; charset=UTF-8");
-
 if(!isset($_GET["Title"]) || !isset($_GET["IdList"]) || !isset($_GET["Deadline"])){
     echo json_encode(["message" => "veuillez saisir un titre"]);
     exit;

@@ -26,5 +26,5 @@ if(!isset($routes[$requestURI])){
 }else{
     $handler = $routes[$requestURI];
 }
-
+header("Content-Type: application/json; charset=UTF-8");
 require("handlers/$handler.php");
