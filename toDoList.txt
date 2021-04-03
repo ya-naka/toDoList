@@ -324,7 +324,7 @@ BEGIN
 	
     DECLARE C_Liste 
 		CURSOR FOR 
-			Select CONCAT_WS('¤', IdStep, Title, Description, CONVERT(CheckStep, CHAR(1)))
+			Select CONCAT_WS('¤', IdStep, TaskId, Title, Description, CONVERT(CheckStep, CHAR(1)))
 			from Step 
 			where TaskId = PTaskId 
 			order by CreationDate ASC; 
@@ -342,6 +342,17 @@ BEGIN
     CLOSE C_Liste;
 	
 RETURN V_Liste; 
+END |
+
+
+/*TRIGGER*/
+CREATE TRIGGER VerifyTitleList 
+BEFORE INSERT ON list 
+FOR EACH ROW 
+BEGIN 
+IF LENGTH(NEW.Title)=0 THEN 
+signal sqlstate '20001' SET MESSAGE_TEXT = 'Le titre ne peux pas être null';
+END IF; 
 END |
 
 DELIMITER ;

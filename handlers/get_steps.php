@@ -5,14 +5,13 @@ if(!isset($_GET["IdTask"])){
     exit;
 }
 
-$request = $db->prepare("SELECT getTaskSteps(?);
-");
+$request = $db->prepare("SELECT getTaskSteps(?);");
 $request->execute([$_GET["IdTask"]]);
 $steps = $request->fetch();
 var_dump($steps);
 
-if(!$steps[0]){
-    echo json_encode(["message" => "Vous n'avez pas encore cree de tache"]);
+if($steps[0] === null){
+    echo json_encode(["message" => "Vous n'avez pas encore cree d'etape"]);
     exit;
 }
 
@@ -29,6 +28,6 @@ for($i = 0; $i < sizeof($step); $i++){
 }
 
 echo json_encode([
-    "tasks" => $step,
+    "steps" => $step,
     "message" => "",
 ]);

@@ -28,5 +28,11 @@ $routes = [
     "/get_lists" => "get_lists",
     "/get_tasks" => "get_tasks",
     "/get_steps" => "get_steps",
+    "/add_list" => "add_list",
     "/error" => "error",
+];
+
+$parameters = [
+    "Title" => 30,
+    "Description" => 300,
 ];
