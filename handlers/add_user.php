@@ -1,13 +1,17 @@
 <?php
-
+header("Content-Type: application/json; charset=UTF-8");
 if(!isset($_POST["email"]) || !isset($_POST["password"]) || !isset($_POST["password_conf"])){
-    $message = "veuillez remplir tous les champs";
-    goto relocation;
+    echo json_encode([
+        "message" => "veuillez remplir tous les champs",
+    ]);
+    exit;
 }
 
 if($_POST["password"] !== $_POST["password_conf"]){
-    $message = "les mdp ne correspondent pas";
-    goto relocation;
+    echo json_encode([
+        "message" => "les mdp ne correspondent pas",
+    ]);
+    exit;
 }
 
 $password = password_hash($_POST["password"], PASSWORD_BCRYPT);
@@ -17,21 +21,12 @@ try{
     $request->execute([$_POST["email"], $password]);
     $message = "none";
 }catch(Exception $e){
-    $request = $db->prepare("SELECT Email FROM users WHERE Email=?");
-    $request->execute([$_POST["email"]]);
-    $email = $request->fetch();
-    var_dump($email);
-    if($email !== null){
-        $message = "Cet email est deja utilise";
-    }else{
-        $message = "erreur lors de la creation du compte";
-    }
+    echo json_encode([
+        "message" => messageException($e),
+    ]);
+    exit;
 }
 
-$message = "Votre compte a bien été cree et un email de confirmation vous a ete envoye";
-
-relocation:
-header("Content-Type: application/json; charset=UTF-8");
 echo json_encode([
-    "message" => $message,
+    "message" => "Votre compte a bien été cree et un email de confirmation vous a ete envoye",
 ]);

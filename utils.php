@@ -2,5 +2,5 @@
 
 function messageException(Exception $e){
     $error = explode(":", $e->getMessage());
-    echo substr($error[2], 6);
+    return substr($error[2], 6);
 }

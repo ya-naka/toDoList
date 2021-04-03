@@ -346,13 +346,56 @@ END |
 
 
 /*TRIGGER*/
+DROP TRIGGER IF EXISTS VerifyTitleList |
+DROP TRIGGER IF EXISTS VerifyTitleTask |
+DROP TRIGGER IF EXISTS VerifyTitleStep |
+DROP TRIGGER IF EXISTS VerifyInsertEmail |
+DROP TRIGGER IF EXISTS VerifyDeadlineTask |
+
 CREATE TRIGGER VerifyTitleList 
 BEFORE INSERT ON list 
 FOR EACH ROW 
 BEGIN 
 IF LENGTH(NEW.Title)=0 THEN 
-signal sqlstate '20001' SET MESSAGE_TEXT = 'Le titre ne peux pas être null';
+signal sqlstate '20001' SET MESSAGE_TEXT = 'Le titre de la liste ne peut pas etre nul';
 END IF; 
 END |
 
+CREATE TRIGGER VerifyTitleTask 
+BEFORE INSERT ON task 
+FOR EACH ROW 
+BEGIN 
+IF LENGTH(NEW.Title)=0 THEN 
+signal sqlstate '20001' SET MESSAGE_TEXT = 'Le titre de la tache ne peut pas etre nul';
+END IF; 
+END |
+
+CREATE TRIGGER VerifyTitleStep
+BEFORE INSERT ON step 
+FOR EACH ROW 
+BEGIN 
+IF LENGTH(NEW.Title)=0 THEN 
+signal sqlstate '20001' SET MESSAGE_TEXT = 'Le titre de l''etape ne peut pas etre nul';
+END IF; 
+END |
+
+CREATE TRIGGER VerifyInsertEmail 
+BEFORE INSERT ON users 
+FOR EACH ROW 
+BEGIN 
+DECLARE V_email VARCHAR(30);
+SELECT Email INTO V_email FROM users WHERE Email=new.Email;
+IF LENGTH(V_email)>0 THEN 
+signal sqlstate '20002' SET MESSAGE_TEXT = 'Cet email existe deja';
+END IF; 
+END |
+
+CREATE TRIGGER VerifyDeadlineTask 
+BEFORE INSERT ON Task 
+FOR EACH ROW 
+BEGIN 
+IF New.Deadline<sysdate() THEN 
+signal sqlstate '20002' SET MESSAGE_TEXT = 'la tache ne peut etre terminee avant sa date de creation'; 
+END IF; 
+END |
 DELIMITER ;
