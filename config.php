@@ -23,6 +23,7 @@ $routes = [
     "/delete_step" => "delete_step",
     "/delete_task" => "delete_task",
     "/delete_list" => "delete_list",
+    "/delete_user" => "delete_user",
     "/update_mail" => "update_mail",
     "/update_password" => "update_password",
     "/get_lists" => "get_lists",

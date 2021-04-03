@@ -1,5 +1,4 @@
 <?php
-header("Content-Type: application/json; charset=UTF-8");
 if(!isset($_SESSION["user"])){
     echo json_encode(["message" => "utilisateur inconnu"]);
     exit;
