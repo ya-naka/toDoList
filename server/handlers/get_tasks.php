@@ -1,13 +1,13 @@
 <?php
 
 header("Content-Type: application/json; charset=UTF-8");
-if(!isset($_GET["IdList"])){
+if(!isset($_POST["IdList"])){
     echo json_encode(["message" => "liste inconnue"]);
     exit;
 }
 
 $request = $db->prepare("SELECT getListTasks(?)");
-$request->execute([$_GET["IdList"]]);
+$request->execute([$_POST["IdList"]]);
 $tasks = $request->fetch();
 var_dump($tasks);
 

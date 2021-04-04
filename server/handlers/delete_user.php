@@ -1,7 +1,7 @@
 <?php
 
 header("Content-Type: application/json; charset=UTF-8");
-if(!isset($_GET["IdUser"])){
+if(!isset($_POST["IdUser"])){
     echo json_encode([
         "message" => "Utilisateur introuvable",
     ]);
@@ -10,7 +10,7 @@ if(!isset($_GET["IdUser"])){
 
 try{
     $request = $db->prepare("CALL deleteUser(?)");
-    $request->execute([$_GET["IdUser"]]);
+    $request->execute([$_POST["IdUser"]]);
 }catch(Exception $e){
     echo json_encode(["message" => messageException($e)]);
     exit;

@@ -1,7 +1,7 @@
 <?php
 
 header("Content-Type: application/json; charset=UTF-8");
-if(!isset($_GET["IdList"])){
+if(!isset($_POST["IdList"])){
     echo json_encode([
         "message" => "Liste introuvable",
     ]);
@@ -10,7 +10,7 @@ if(!isset($_GET["IdList"])){
 
 try{
     $request = $db->prepare("CALL deleteList(?)");
-    $request->execute([$_GET["IdList"]]);
+    $request->execute([$_POST["IdList"]]);
 }catch(Exception $e){
     echo json_encode(["message" => messageException($e)]);
     exit;

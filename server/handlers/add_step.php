@@ -1,22 +1,22 @@
 <?php
 
 header("Content-Type: application/json; charset=UTF-8");
-if(!isset($_GET["IdTask"])){
+if(!isset($_POST["IdTask"])){
     echo json_encode(["message" => "tache introuvable"]);
     exit;
 }
-if(!isset($_GET["Title"])){
+if(!isset($_POST["Title"])){
     echo json_encode(["message" => "veuillez saisir un titre"]);
     exit;
 }
 
-$title = substr($_GET["Title"], 0, $parameters["Title"]);
-$description = !isset($_GET["Description"]) ? "" : substr($_GET["Description"], 0, $parameters["Description"]);
+$title = substr($_POST["Title"], 0, $parameters["Title"]);
+$description = !isset($_POST["Description"]) ? "" : substr($_POST["Description"], 0, $parameters["Description"]);
 
 try{
     
 $request = $db->prepare("CALL InsertStep(?,?,?)");
-$request->execute([$_GET["IdTask"],$title, $description]);
+$request->execute([$_POST["IdTask"],$title, $description]);
 }catch(Exception $e){
     echo json_encode([
         "message" => messageException($e),

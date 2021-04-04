@@ -1,7 +1,7 @@
 <?php
 
 header("Content-Type: application/json; charset=UTF-8");
-if(!isset($_GET["IdStep"])){
+if(!isset($_POST["IdStep"])){
     echo json_encode([
         "message" => "Etape introuvable",
     ]);
@@ -10,7 +10,7 @@ if(!isset($_GET["IdStep"])){
 
 try{
     $request = $db->prepare("CALL deleteStep(?)");
-    $request->execute([$_GET["IdStep"]]);
+    $request->execute([$_POST["IdStep"]]);
 }catch(Exception $e){
     echo json_encode(["message" => messageException($e)]);
     exit;

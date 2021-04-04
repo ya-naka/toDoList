@@ -1,26 +1,26 @@
 <?php
 
 header("Content-Type: application/json; charset=UTF-8");
-if(!isset($_GET["IdList"])){
+if(!isset($_POST["IdList"])){
     echo json_encode(["message" => "Liste introuvable"]);
     exit;
 }
-if(!isset($_GET["Title"]) || !isset($_GET["Deadline"])){
+if(!isset($_POST["Title"]) || !isset($_POST["Deadline"])){
     echo json_encode(["message" => "veuillez saisir tous les champs"]);
     exit;
 }
 
-$deadlineDate=date_create($_GET["Deadline"]);
+$deadlineDate=date_create($_POST["Deadline"]);
 if(!$deadlineDate){
     echo json_encode(["message" => "veuillez choisir une date valide"]);
     exit;
 }
 
-$title = substr($_GET["Title"], 0, $parameters["Title"]);
-$description = !isset($_GET["Description"]) ? "" : substr($_GET["Description"], 0, $parameters["Description"]);
+$title = substr($_POST["Title"], 0, $parameters["Title"]);
+$description = !isset($_POST["Description"]) ? "" : substr($_POST["Description"], 0, $parameters["Description"]);
 try{
     $request = $db->prepare("CALL InsertTask(?,?,?,?)");
-    $request->execute([$_GET["IdList"], $title, $description, date_format($deadlineDate, "Y-m-d")]);
+    $request->execute([$_POST["IdList"], $title, $description, date_format($deadlineDate, "Y-m-d")]);
 }catch(Exception $e){
     echo json_encode(["message" => messageException($e)]);
     exit;

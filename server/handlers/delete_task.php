@@ -1,7 +1,7 @@
 <?php
 
 header("Content-Type: application/json; charset=UTF-8");
-if(!isset($_GET["IdTask"])){
+if(!isset($_POST["IdTask"])){
     echo json_encode([
         "message" => "Tache introuvable",
     ]);
@@ -10,7 +10,7 @@ if(!isset($_GET["IdTask"])){
 
 try{
     $request = $db->prepare("CALL deleteTask(?)");
-    $request->execute([$_GET["IdTask"]]);
+    $request->execute([$_POST["IdTask"]]);
 }catch(Exception $e){
     echo json_encode(["message" => messageException($e)]);
     exit;

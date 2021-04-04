@@ -1,13 +1,13 @@
 <?php
 
 header("Content-Type: application/json; charset=UTF-8");
-if(!isset($_GET["IdTask"])){
+if(!isset($_POST["IdTask"])){
     echo json_encode(["message" => "tache inconnue"]);
     exit;
 }
 
 $request = $db->prepare("SELECT getTaskSteps(?);");
-$request->execute([$_GET["IdTask"]]);
+$request->execute([$_POST["IdTask"]]);
 $steps = $request->fetch();
 var_dump($steps);
 

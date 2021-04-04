@@ -8,14 +8,9 @@ $config["db_user"] = "root";
 $config["db_password"] = "";
 
 $routes = [
-    "/" => "home",
-    "/home" => "home",
-    "/signin" => "signin",
     "/verify_user" => "verify_user",
     "/signout" => "signout",
-    "/signup" => "signup",
     "/forgot_password" => "forgot_password",
-    "/settings" => "settings",
     "/add_list" => "add_list",
     "/add_task" => "add_task",
     "/add_step" => "add_step",
