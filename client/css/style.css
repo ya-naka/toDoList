@@ -96,7 +96,7 @@ button {
     height: 2rem;
     top: 0;
     left: 0;
-    background-image: url('assets/menu.svg');
+    background-image: url('../assets/menu.svg');
     background-repeat: no-repeat;
     background-size: cover;
     content: '';
@@ -113,7 +113,7 @@ button {
     height: 2rem;
     top: 0;
     left: 0;
-    background-image: url('assets/close.svg');
+    background-image: url('../assets/close.svg');
     background-repeat: no-repeat;
     background-size: cover;
     content: '';
@@ -169,7 +169,7 @@ button {
     top: -3px;
     height: 1.5rem;
     width: 1.5rem;
-    background-image: url('assets/home.svg');
+    background-image: url('../assets/home.svg');
     background-repeat: no-repeat;
     background-size: contain;
     content: '';
@@ -234,7 +234,7 @@ button {
     top: 0;
     height: 1rem;
     width: 1rem;
-    background-image: url('assets/plus.svg');
+    background-image: url('../assets/plus.svg');
     background-repeat: no-repeat;
     background-size: contain;
     content: '';
@@ -274,7 +274,7 @@ button {
     left: 1rem;
     width: 1rem;
     height: 1rem;
-    background-image: url('assets/settings.svg');
+    background-image: url('../assets/settings.svg');
     background-repeat: no-repeat;
     background-size: contain;
     content: '';
@@ -286,7 +286,7 @@ button {
     left: 1rem;
     width: 1rem;
     height: 1rem;
-    background-image: url('assets/logout.svg');
+    background-image: url('../assets/logout.svg');
     background-repeat: no-repeat;
     background-size: contain;
     content: '';
@@ -342,7 +342,7 @@ button {
 .icon .checked {
     background-color: #ff7675;
     border: 1px solid #ff7675;
-    background-image: url('assets/check.svg');
+    background-image: url('../assets/check.svg');
     background-repeat: no-repeat;
     background-size: cover;
 }

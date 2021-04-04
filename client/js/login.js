@@ -1,5 +1,5 @@
 import { init } from "./App";
-import markup from "./connexion.html"
+import markup from "../connexion.html"
 
 /**
   * @param {HTMLElement} container

@@ -1,7 +1,7 @@
-import * as LoginPage from "/js/login"
-import * as HomePage from "/js/home"
-import * as RegisterPage from "/js/register"
-import * as NotFoundPage from "/js/notFound"
+import * as LoginPage from "login"
+import * as HomePage from "\home"
+//import * as RegisterPage from "\register"
+//import * as NotFoundPage from "\notFound"
 
 /**
   * @param {HTMLElement} container
@@ -17,16 +17,18 @@ import * as NotFoundPage from "/js/notFound"
 	const initRoutes = () => {
 	  router
 
-	 	.on("/", () => {
-		  currentPage = LoginPage.render(container, router)
-		}, {
-		  before: protectAuthenticatedRoute
-		})
+//	 	.on("/", () => {
+//		  currentPage = LoginPage.render(container, router)
+//		}, {
+//		  before: protectAuthenticatedRoute
+//		})
 
   		.on("/login", () => {
 		  currentPage = LoginPage.render(container, router)
 		})
+	}
   
+/* 
 		.on("/register", () => {
 		  currentPage = RegisterPage.render(container, router)
 		})
@@ -44,12 +46,6 @@ import * as NotFoundPage from "/js/notFound"
   
 	  router.resolve()
 	}
-  
-	/**
-	  * @param {Function} done - Callback à appeler sans paramètre pour poursuivre
-	  * le changement de page, ou avec `false` en paramètre pour empêcher le
-	  * changement de paage
-	  */
 	const protectAuthenticatedRoute = (done) => {
 	  // Si l'utilisateur est connecté (voir module `src/services/auth.js`), on
 	  // poursuit le changement de page, sinon on empêche le changement de page
@@ -69,7 +65,8 @@ import * as NotFoundPage from "/js/notFound"
   
 	  done()
 	}
-  
+  */
+
 	const destroy = () => {
 	  router.destroy()
 	}
@@ -78,8 +75,6 @@ import * as NotFoundPage from "/js/notFound"
   
 	return { destroy }
   }
-
-
 
 
 
