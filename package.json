@@ -1,0 +1,19 @@
+{
+  "name": "projettuteure",
+  "version": "1.0.0",
+  "description": "projrt tuteure todolist",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RomainBourges/ProjetTuteur-.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RomainBourges/ProjetTuteur-/issues"
+  },
+  "homepage": "https://github.com/RomainBourges/ProjetTuteur-#readme"
+}
