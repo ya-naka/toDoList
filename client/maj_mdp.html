@@ -1,8 +1,16 @@
 
-	<!--<title>Mot de passe oublié | To-do list</title>-->
-    <body id="landing">
+<!doctype html>
+<html lang="fr">
+    <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/style.css">
+	<title>To-do list</title>
+    </head>
+<body id="landing">
 		<main id="frame-container">
-			<form action="<?= uri("/update_password") ?>" method="POST" class="text-start" id="frame">
+			<form action="" method="POST" class="text-start" id="frame">
 				<label for="password">Nouveau mot de passe</label>
 				<input type="password" id="password" name="password" class="form-control" placeholder="password" required autofocus>
 				<div class="error">
@@ -21,10 +29,11 @@
 				</button>
 				<div class="success text-center">
 					Le mot de passe a été modifié avec succès.
-					<a href="<?= uri("/login") ?>" title="Se connecter" class="success">
+					<a href="" title="Se connecter" class="success">
 					Cliquez ici pour vous connecter
 					</a>
 				</div>
 			</form>
 		</main>
 	</body>
+</html>
